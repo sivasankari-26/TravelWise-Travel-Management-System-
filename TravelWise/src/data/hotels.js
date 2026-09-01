@@ -1,0 +1,28 @@
+export const hotels = [
+  { id: 'h1', destinationId: 'goa', name: 'Baga Sunset Resort', stars: 3, pricePerNight: 2800, availability: 'Available' },
+  { id: 'h2', destinationId: 'goa', name: 'Anjuna Palm Retreat', stars: 4, pricePerNight: 4200, availability: 'Available' },
+  { id: 'h3', destinationId: 'goa', name: 'Candolim Beach Grand', stars: 5, pricePerNight: 7600, availability: 'Limited' },
+  { id: 'h4', destinationId: 'manali', name: 'Solang Pine Cottages', stars: 3, pricePerNight: 2600, availability: 'Available' },
+  { id: 'h5', destinationId: 'manali', name: 'Old Manali Riverside', stars: 4, pricePerNight: 4000, availability: 'Available' },
+  { id: 'h6', destinationId: 'manali', name: 'Manali Snow Crest', stars: 5, pricePerNight: 7200, availability: 'Available' },
+  { id: 'h7', destinationId: 'kerala', name: 'Alleppey Backwater Homestay', stars: 3, pricePerNight: 2900, availability: 'Available' },
+  { id: 'h8', destinationId: 'kerala', name: 'Kumarakom Houseboat Deluxe', stars: 4, pricePerNight: 4800, availability: 'Limited' },
+  { id: 'h9', destinationId: 'kerala', name: 'Munnar Tea Estate Resort', stars: 5, pricePerNight: 8200, availability: 'Available' },
+  { id: 'h10', destinationId: 'jaipur', name: 'Pink City Heritage Inn', stars: 3, pricePerNight: 2400, availability: 'Available' },
+  { id: 'h11', destinationId: 'jaipur', name: 'Amber Haveli Suites', stars: 4, pricePerNight: 3900, availability: 'Available' },
+  { id: 'h12', destinationId: 'jaipur', name: 'Rambagh Royal Residency', stars: 5, pricePerNight: 9500, availability: 'Limited' },
+  { id: 'h13', destinationId: 'ladakh', name: 'Leh Valley Guesthouse', stars: 3, pricePerNight: 3100, availability: 'Available' },
+  { id: 'h14', destinationId: 'ladakh', name: 'Nubra Camp Deluxe', stars: 4, pricePerNight: 4700, availability: 'Available' },
+  { id: 'h15', destinationId: 'ladakh', name: 'Pangong Lakeview Lodge', stars: 5, pricePerNight: 8900, availability: 'Limited' },
+  { id: 'h16', destinationId: 'andaman', name: 'Havelock Beachside Huts', stars: 3, pricePerNight: 3300, availability: 'Available' },
+  { id: 'h17', destinationId: 'andaman', name: 'Neil Island Coral Resort', stars: 4, pricePerNight: 5100, availability: 'Available' },
+  { id: 'h18', destinationId: 'andaman', name: 'Radhanagar Ocean Villas', stars: 5, pricePerNight: 9800, availability: 'Limited' },
+  { id: 'h19', destinationId: 'rishikesh', name: 'Ganges Ashram Stay', stars: 3, pricePerNight: 1900, availability: 'Available' },
+  { id: 'h20', destinationId: 'rishikesh', name: 'Laxman Jhula Riverview', stars: 4, pricePerNight: 3400, availability: 'Available' },
+  { id: 'h21', destinationId: 'rishikesh', name: 'Rishikesh Wellness Resort', stars: 5, pricePerNight: 6800, availability: 'Available' },
+  { id: 'h22', destinationId: 'udaipur', name: 'Lake Pichola Budget Stay', stars: 3, pricePerNight: 2700, availability: 'Available' },
+  { id: 'h23', destinationId: 'udaipur', name: 'City Palace View Hotel', stars: 4, pricePerNight: 4500, availability: 'Available' },
+  { id: 'h24', destinationId: 'udaipur', name: 'Taj Lake Palace Wing', stars: 5, pricePerNight: 11500, availability: 'Limited' },
+];
+
+export const getHotelsByDestination = (destinationId) => hotels.filter((h) => h.destinationId === destinationId);
