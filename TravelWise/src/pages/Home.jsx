@@ -8,6 +8,7 @@ import { packages } from '../data/packages.js';
 import { testimonials } from '../data/testimonials.js';
 import DestinationCard from '../components/customer/DestinationCard.jsx';
 import PackageCard from '../components/customer/PackageCard.jsx';
+import Footer from '../components/common/Footer.jsx';
 import { useDocumentTitle } from '../hooks/useDocumentTitle.js';
 import { useScrollReveal } from '../hooks/useScrollReveal.js';
 
@@ -39,7 +40,10 @@ export default function Home() {
             <Compass size={26} color="var(--color-amber)" />
             <span style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '1.25rem' }}>Travel Wise</span>
           </div>
-          <div className="flex" style={{ gap: 12 }}>
+          <div className="flex" style={{ gap: 12, alignItems: 'center' }}>
+            <Link to="/admin/login" style={{ color: '#cbd5e1', fontSize: '0.85rem', fontWeight: 600 }}>
+              Admin
+            </Link>
             <Link to="/login" className="btn btn-outline-light btn-sm">Log In</Link>
             <Link to="/register" className="btn btn-accent btn-sm">Sign Up</Link>
           </div>
@@ -238,6 +242,8 @@ export default function Home() {
           <Link to="/register" className="btn btn-accent btn-lg">Get Started — It's Free</Link>
         </div>
       </section>
+
+      <Footer />
     </div>
   );
 }
