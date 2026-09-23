@@ -23,6 +23,7 @@ import Payment from './pages/customer/Payment.jsx';
 import BookingConfirmation from './pages/customer/BookingConfirmation.jsx';
 import MyBookings from './pages/customer/MyBookings.jsx';
 import Profile from './pages/customer/Profile.jsx';
+import Settings from './pages/customer/Settings.jsx';
 
 import Dashboard from './pages/admin/Dashboard.jsx';
 import AdminDestinations from './pages/admin/AdminDestinations.jsx';
@@ -64,6 +65,7 @@ export default function App() {
         <Route path="booking-confirmation" element={<BookingConfirmation />} />
         <Route path="bookings" element={<MyBookings />} />
         <Route path="profile" element={<Profile />} />
+        <Route path="settings" element={<Settings />} />
       </Route>
 
       {/* Admin routes (protected, share AdminLayout) */}

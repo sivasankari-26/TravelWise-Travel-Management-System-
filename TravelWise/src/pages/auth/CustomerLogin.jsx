@@ -96,9 +96,6 @@ export default function CustomerLogin() {
         <p className="text-center" style={{ marginTop: 24, fontSize: '0.9rem' }}>
           Don't have an account? <Link to="/register" style={{ color: 'var(--color-blue)', fontWeight: 600 }}>Register</Link>
         </p>
-        <p className="text-center muted" style={{ fontSize: '0.78rem', marginTop: 20 }}>
-          Frontend simulation — use any email and a password of 4+ characters.
-        </p>
       </div>
       <AuthStyles />
     </div>

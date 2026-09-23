@@ -377,3 +377,28 @@ table.data-table th {
 }
 table.data-table td { padding: 14px 16px; border-bottom: 1px solid var(--color-border-soft); font-size: 0.92rem; }
 table.data-table tr:hover td { background: var(--color-cloud); }
+
+/* ==========================================================================
+   DARK MODE — overrides the same tokens used everywhere above
+   ========================================================================== */
+[data-theme="dark"] {
+  --color-ink: #eef2f7;
+  --color-ink-soft: #cbd5e1;
+  --color-slate: #94a3b8;
+  --color-slate-light: #64748b;
+  --color-cloud: #0b1420;
+  --color-white: #101c2c;
+  --color-border: #23303f;
+  --color-border-soft: #1b2634;
+  --color-blue-tint: #16233a;
+}
+[data-theme="dark"] body { background: var(--color-cloud); color: var(--color-ink); }
+[data-theme="dark"] header { background: rgba(16, 28, 44, 0.92) !important; }
+[data-theme="dark"] .page-hero-plain { background: #060c15; }
+
+/* ==========================================================================
+   FONT SIZE — scales the root, everything else uses rem so it follows
+   ========================================================================== */
+html[data-font-size="small"] { font-size: 14px; }
+html[data-font-size="medium"] { font-size: 16px; }
+html[data-font-size="large"] { font-size: 18px; }

@@ -1,23 +1,27 @@
 import { useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { Compass, Menu, X, User, LogOut, ChevronDown } from 'lucide-react';
+import { Compass, Menu, X, User, LogOut, ChevronDown, Settings as SettingsIcon } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext.jsx';
 import { useToast } from '../../context/ToastContext.jsx';
-
-const LINKS = [
-  { to: '/customer/home', label: 'Home' },
-  { to: '/customer/destinations', label: 'Destinations' },
-  { to: '/customer/packages', label: 'Packages' },
-  { to: '/customer/customize-package', label: 'Customize' },
-  { to: '/customer/bookings', label: 'My Bookings' },
-];
+import { useSettings } from '../../context/SettingsContext.jsx';
+import { useTranslate } from '../../i18n/translations.js';
 
 export default function CustomerNavbar() {
   const [open, setOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const { customer, logoutCustomer } = useAuth();
   const { showToast } = useToast();
+  const { language } = useSettings();
+  const t = useTranslate(language);
   const navigate = useNavigate();
+
+  const LINKS = [
+    { to: '/customer/home', label: t('navHome') },
+    { to: '/customer/destinations', label: t('navDestinations') },
+    { to: '/customer/packages', label: t('navPackages') },
+    { to: '/customer/customize-package', label: t('navCustomize') },
+    { to: '/customer/bookings', label: t('navBookings') },
+  ];
 
   const handleLogout = () => {
     logoutCustomer();
@@ -70,7 +74,7 @@ export default function CustomerNavbar() {
             >
               {customer?.name?.[0]?.toUpperCase() || <User size={14} />}
             </span>
-            <span style={{ fontSize: '0.88rem', fontWeight: 600 }}>{customer?.name || 'Account'}</span>
+            <span style={{ fontSize: '0.88rem', fontWeight: 600 }}>{customer?.name || t('navAccount')}</span>
             <ChevronDown size={14} />
           </button>
           {menuOpen && (
@@ -80,10 +84,13 @@ export default function CustomerNavbar() {
               onMouseLeave={() => setMenuOpen(false)}
             >
               <Link to="/customer/profile" className="flex btn-ghost btn btn-block" style={{ justifyContent: 'flex-start', gap: 10 }} onClick={() => setMenuOpen(false)}>
-                <User size={16} /> Profile
+                <User size={16} /> {t('navProfile')}
+              </Link>
+              <Link to="/customer/settings" className="flex btn-ghost btn btn-block" style={{ justifyContent: 'flex-start', gap: 10 }} onClick={() => setMenuOpen(false)}>
+                <SettingsIcon size={16} /> {t('navSettings')}
               </Link>
               <button className="flex btn-ghost btn btn-block" style={{ justifyContent: 'flex-start', gap: 10 }} onClick={handleLogout}>
-                <LogOut size={16} /> Logout
+                <LogOut size={16} /> {t('navLogout')}
               </button>
             </div>
           )}
@@ -126,10 +133,13 @@ export default function CustomerNavbar() {
               </NavLink>
             ))}
             <Link to="/customer/profile" onClick={() => setOpen(false)} style={{ padding: '12px 8px', fontWeight: 600, borderBottom: '1px solid var(--color-border-soft)' }}>
-              Profile
+              {t('navProfile')}
+            </Link>
+            <Link to="/customer/settings" onClick={() => setOpen(false)} style={{ padding: '12px 8px', fontWeight: 600, borderBottom: '1px solid var(--color-border-soft)' }}>
+              {t('navSettings')}
             </Link>
             <button className="btn btn-outline" style={{ marginTop: 16 }} onClick={handleLogout}>
-              <LogOut size={16} /> Logout
+              <LogOut size={16} /> {t('navLogout')}
             </button>
           </div>
         </div>
