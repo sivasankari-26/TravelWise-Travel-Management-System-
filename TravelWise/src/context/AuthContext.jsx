@@ -5,6 +5,9 @@ const AuthContext = createContext(null);
 const CUSTOMER_KEY = 'tw_customer_session';
 const ADMIN_KEY = 'tw_admin_session';
 const CUSTOMER_USERS_KEY = 'tw_customer_users';
+const CUSTOMER_TOKEN_KEY = 'tw_customer_token';
+
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 export function AuthProvider({ children }) {
   const [customer, setCustomer] = useState(null);
@@ -85,6 +88,32 @@ export function AuthProvider({ children }) {
     return { success: true };
   };
 
+  // Real backend call: sends the Google ID token to our Express server,
+  // which verifies it with Google, creates/finds the user in MongoDB,
+  // and returns our own JWT.
+  const loginWithGoogle = async (googleToken) => {
+    try {
+      const res = await fetch(`${API_URL}/auth/google`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: googleToken }),
+      });
+      const data = await res.json();
+
+      if (!res.ok || !data.success) {
+        return { success: false, message: data.message || 'Google sign-in failed.' };
+      }
+
+      const session = { name: data.user.name, email: data.user.email, picture: data.user.picture };
+      localStorage.setItem(CUSTOMER_KEY, JSON.stringify(session));
+      localStorage.setItem(CUSTOMER_TOKEN_KEY, data.token);
+      setCustomer(session);
+      return { success: true };
+    } catch (err) {
+      return { success: false, message: 'Could not reach the server. Please try again.' };
+    }
+  };
+
   const updateCustomer = (updates) => {
     setCustomer((prev) => {
       const next = { ...prev, ...updates };
@@ -104,6 +133,7 @@ export function AuthProvider({ children }) {
 
   const logoutCustomer = () => {
     localStorage.removeItem(CUSTOMER_KEY);
+    localStorage.removeItem(CUSTOMER_TOKEN_KEY);
     setCustomer(null);
   };
 
@@ -129,6 +159,7 @@ export function AuthProvider({ children }) {
         admin,
         ready,
         loginCustomer,
+        loginWithGoogle,
         registerCustomer,
         updateCustomer,
         logoutCustomer,

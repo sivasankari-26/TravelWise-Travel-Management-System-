@@ -2,6 +2,7 @@ import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import connectDB from './config/db.js';
+import authRoutes from './routes/auth.js';
 
 const app = express();
 
@@ -11,6 +12,8 @@ app.use(express.json());
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'Travel Wise API is running' });
 });
+
+app.use('/auth', authRoutes);
 
 const PORT = process.env.PORT || 5000;
 

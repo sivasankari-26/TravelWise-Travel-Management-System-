@@ -1,4 +1,5 @@
-import { useState } from 'react';
+// src/pages/auth/CustomerLogin.jsx
+import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Mail, Lock, Eye, EyeOff, Compass } from 'lucide-react';
 import Input from '../../components/common/Input.jsx';
@@ -14,10 +15,11 @@ export default function CustomerLogin() {
   const [showPw, setShowPw] = useState(false);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
-  const { loginCustomer } = useAuth();
+  const { loginCustomer, loginWithGoogle } = useAuth();
   const { showToast } = useToast();
   const navigate = useNavigate();
   const location = useLocation();
+  const googleBtnRef = useRef(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -39,6 +41,34 @@ export default function CustomerLogin() {
       }
     }, 500);
   };
+
+  // Called by Google once the user picks an account in the popup.
+  const handleGoogleResponse = async (response) => {
+    const result = await loginWithGoogle(response.credential);
+    if (result.success) {
+      showToast('Welcome back!', 'success');
+      navigate(location.state?.from?.pathname || '/customer/home');
+    } else {
+      showToast(result.message, 'error');
+    }
+  };
+
+  useEffect(() => {
+    if (!window.google || !googleBtnRef.current) return;
+
+    window.google.accounts.id.initialize({
+      client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
+      callback: handleGoogleResponse,
+    });
+
+    window.google.accounts.id.renderButton(googleBtnRef.current, {
+      theme: 'outline',
+      size: 'large',
+      width: '100%',
+      text: 'signin_with',
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="auth-page">
@@ -93,6 +123,12 @@ export default function CustomerLogin() {
           <Button type="submit" variant="primary" block loading={loading}>Log In</Button>
         </form>
 
+        <div className="auth-divider">
+          <span>or</span>
+        </div>
+
+        <div ref={googleBtnRef} style={{ display: 'flex', justifyContent: 'center' }} />
+
         <p className="text-center" style={{ marginTop: 24, fontSize: '0.9rem' }}>
           Don't have an account? <Link to="/register" style={{ color: 'var(--color-blue)', fontWeight: 600 }}>Register</Link>
         </p>
@@ -115,6 +151,16 @@ export function AuthStyles() {
         width: 100%; max-width: 440px; box-shadow: var(--shadow-lg);
       }
       @media (max-width: 480px) { .auth-card { padding: 30px 24px; } }
+
+      .auth-divider {
+        display: flex; align-items: center; text-align: center;
+        color: var(--color-ink, #16324a); opacity: 0.5;
+        font-size: 0.82rem; margin: 20px 0;
+      }
+      .auth-divider::before, .auth-divider::after {
+        content: ''; flex: 1; border-bottom: 1px solid #e2e8f0;
+      }
+      .auth-divider span { padding: 0 12px; }
     `}</style>
   );
 }
