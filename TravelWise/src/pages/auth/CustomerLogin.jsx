@@ -21,25 +21,26 @@ export default function CustomerLogin() {
   const location = useLocation();
   const googleBtnRef = useRef(null);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const errs = {};
     if (!isValidEmail(form.email)) errs.email = 'Enter a valid email address.';
-    if (!form.password || form.password.length < 4) errs.password = 'Password must be at least 4 characters.';
+    if (!form.password) errs.password = 'Enter your password.';
     setErrors(errs);
     if (Object.keys(errs).length) return;
 
     setLoading(true);
-    setTimeout(() => {
-      const result = loginCustomer(form.email, form.password);
-      setLoading(false);
+    try {
+      const result = await loginCustomer(form.email, form.password);
       if (result.success) {
         showToast('Welcome back!', 'success');
         navigate(location.state?.from?.pathname || '/customer/home');
       } else {
         showToast(result.message, 'error');
       }
-    }, 500);
+    } finally {
+      setLoading(false);
+    }
   };
 
   // Called by Google once the user picks an account in the popup.

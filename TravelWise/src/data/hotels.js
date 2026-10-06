@@ -63,6 +63,36 @@ export const hotels = [
   { id: 'h46', destinationId: 'udaipur', name: 'Fatehpura Budget Lodge', stars: 2, pricePerNight: 1800, availability: 'Available' },
   { id: 'h47', destinationId: 'udaipur', name: 'Lake Pichola Heritage Haveli', stars: 4, pricePerNight: 5200, availability: 'Available' },
   { id: 'h48', destinationId: 'udaipur', name: 'Udaivilas Royal Suites', stars: 5, pricePerNight: 12500, availability: 'Limited' },
+
+  // ---------- DARJEELING ----------
+  { id: 'h49', destinationId: 'darjeeling', name: 'Mall Road Budget Lodge', stars: 2, pricePerNight: 1500, availability: 'Available' },
+  { id: 'h50', destinationId: 'darjeeling', name: 'Tea Garden Homestay', stars: 3, pricePerNight: 2800, availability: 'Available' },
+  { id: 'h51', destinationId: 'darjeeling', name: 'Kanchenjunga View Hotel', stars: 4, pricePerNight: 4600, availability: 'Available' },
+  { id: 'h52', destinationId: 'darjeeling', name: 'Himalayan Heritage Resort', stars: 5, pricePerNight: 8400, availability: 'Limited' },
+
+  // ---------- PONDICHERRY ----------
+  { id: 'h53', destinationId: 'pondicherry', name: 'White Town Budget Stay', stars: 2, pricePerNight: 1700, availability: 'Available' },
+  { id: 'h54', destinationId: 'pondicherry', name: 'French Quarter Guesthouse', stars: 3, pricePerNight: 3000, availability: 'Available' },
+  { id: 'h55', destinationId: 'pondicherry', name: 'Promenade Seaview Hotel', stars: 4, pricePerNight: 5000, availability: 'Available' },
+  { id: 'h56', destinationId: 'pondicherry', name: 'Heritage Colonial Villa', stars: 5, pricePerNight: 9000, availability: 'Limited' },
+
+  // ---------- COORG ----------
+  { id: 'h57', destinationId: 'coorg', name: 'Madikeri Budget Inn', stars: 2, pricePerNight: 1600, availability: 'Available' },
+  { id: 'h58', destinationId: 'coorg', name: 'Coffee Estate Homestay', stars: 3, pricePerNight: 3000, availability: 'Available' },
+  { id: 'h59', destinationId: 'coorg', name: 'Abbey Falls Valley Resort', stars: 4, pricePerNight: 4800, availability: 'Available' },
+  { id: 'h60', destinationId: 'coorg', name: 'Plantation Luxury Villas', stars: 5, pricePerNight: 8600, availability: 'Limited' },
+
+  // ---------- AGRA ----------
+  { id: 'h61', destinationId: 'agra', name: 'Taj Ganj Budget Lodge', stars: 2, pricePerNight: 1400, availability: 'Available' },
+  { id: 'h62', destinationId: 'agra', name: 'Fort View Residency', stars: 3, pricePerNight: 2600, availability: 'Available' },
+  { id: 'h63', destinationId: 'agra', name: 'Taj Mahal View Hotel', stars: 4, pricePerNight: 4400, availability: 'Available' },
+  { id: 'h64', destinationId: 'agra', name: 'Mughal Heritage Palace', stars: 5, pricePerNight: 9200, availability: 'Limited' },
+
+  // ---------- MYSORE ----------
+  { id: 'h65', destinationId: 'mysore', name: 'Palace Road Budget Inn', stars: 2, pricePerNight: 1500, availability: 'Available' },
+  { id: 'h66', destinationId: 'mysore', name: 'Chamundi Hills Guesthouse', stars: 3, pricePerNight: 2700, availability: 'Available' },
+  { id: 'h67', destinationId: 'mysore', name: 'Royal Palace View Hotel', stars: 4, pricePerNight: 4300, availability: 'Available' },
+  { id: 'h68', destinationId: 'mysore', name: 'Heritage Maharaja Residency', stars: 5, pricePerNight: 8800, availability: 'Limited' },
 ];
 
 export const getHotelsByDestination = (destinationId) =>

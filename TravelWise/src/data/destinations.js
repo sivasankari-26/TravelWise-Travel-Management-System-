@@ -4,12 +4,8 @@ export const destinations = [
     name: 'Goa',
     state: 'Goa',
     tagline: 'Sun, surf and endless coastline',
-    image: 'https://picsum.photos/seed/goa/1200/800',
-    gallery: [
-      'https://picsum.photos/seed/goa-1/1200/800',
-      'https://picsum.photos/seed/goa-2/1200/800',
-      'https://picsum.photos/seed/goa-3/1200/800',
-    ],
+    image: '/images/destinations/goa.jpg',
+    gallery: ['/images/destinations/goa.jpg'],
     description:
       'Golden beaches, Portuguese-era lanes and a coastline that never really sleeps. Goa mixes lazy shack afternoons with lively night markets.',
     startingPrice: 14999,
@@ -24,12 +20,8 @@ export const destinations = [
     name: 'Manali',
     state: 'Himachal Pradesh',
     tagline: 'Pine valleys and snow-capped peaks',
-    image: 'https://picsum.photos/seed/manali/1200/800',
-    gallery: [
-      'https://picsum.photos/seed/manali-1/1200/800',
-      'https://picsum.photos/seed/manali-2/1200/800',
-      'https://picsum.photos/seed/manali-3/1200/800',
-    ],
+    image: '/images/destinations/manali.jpg',
+    gallery: ['/images/destinations/manali.jpg'],
     description:
       'A mountain escape ringed by cedar forests and river valleys — ideal for both quiet retreats and adrenaline-packed adventure.',
     startingPrice: 17999,
@@ -44,12 +36,8 @@ export const destinations = [
     name: 'Kerala Backwaters',
     state: 'Kerala',
     tagline: 'Houseboats through God\u2019s Own Country',
-    image: 'https://picsum.photos/seed/kerala/1200/800',
-    gallery: [
-      'https://picsum.photos/seed/kerala-1/1200/800',
-      'https://picsum.photos/seed/kerala-2/1200/800',
-      'https://picsum.photos/seed/kerala-3/1200/800',
-    ],
+    image: '/images/destinations/kerala.jpg',
+    gallery: ['/images/destinations/kerala.jpg'],
     description:
       'Drift past coconut groves and paddy fields on a traditional houseboat, then unwind on quiet Ayurvedic retreats along the coast.',
     startingPrice: 19999,
@@ -64,12 +52,8 @@ export const destinations = [
     name: 'Jaipur',
     state: 'Rajasthan',
     tagline: 'The Pink City\u2019s forts and bazaars',
-    image: 'https://picsum.photos/seed/jaipur/1200/800',
-    gallery: [
-      'https://picsum.photos/seed/jaipur-1/1200/800',
-      'https://picsum.photos/seed/jaipur-2/1200/800',
-      'https://picsum.photos/seed/jaipur-3/1200/800',
-    ],
+    image: '/images/destinations/jaipur.jpg',
+    gallery: ['/images/destinations/jaipur.jpg'],
     description:
       'Amber forts, mirrored palaces and bazaars stacked with block-print textiles — a living museum of Rajput history.',
     startingPrice: 13499,
@@ -84,12 +68,8 @@ export const destinations = [
     name: 'Ladakh',
     state: 'Ladakh',
     tagline: 'High-altitude desert and turquoise lakes',
-    image: 'https://picsum.photos/seed/ladakh/1200/800',
-    gallery: [
-      'https://picsum.photos/seed/ladakh-1/1200/800',
-      'https://picsum.photos/seed/ladakh-2/1200/800',
-      'https://picsum.photos/seed/ladakh-3/1200/800',
-    ],
+    image: '/images/destinations/ladakh.jpg',
+    gallery: ['/images/destinations/ladakh.jpg'],
     description:
       'Moonscape valleys, Buddhist monasteries and the impossibly blue waters of Pangong Tso — Ladakh rewards the adventurous.',
     startingPrice: 26999,
@@ -104,12 +84,8 @@ export const destinations = [
     name: 'Andaman Islands',
     state: 'Andaman & Nicobar',
     tagline: 'Reef-fringed islands in turquoise seas',
-    image: 'https://picsum.photos/seed/andaman/1200/800',
-    gallery: [
-      'https://picsum.photos/seed/andaman-1/1200/800',
-      'https://picsum.photos/seed/andaman-2/1200/800',
-      'https://picsum.photos/seed/andaman-3/1200/800',
-    ],
+    image: '/images/destinations/andaman.jpg',
+    gallery: ['/images/destinations/andaman.jpg'],
     description:
       'Powder-white beaches, coral reefs and quiet island life — the Andamans feel worlds away from the mainland.',
     startingPrice: 22999,
@@ -124,12 +100,8 @@ export const destinations = [
     name: 'Rishikesh',
     state: 'Uttarakhand',
     tagline: 'Yoga capital on the Ganges',
-    image: 'https://picsum.photos/seed/rishikesh/1200/800',
-    gallery: [
-      'https://picsum.photos/seed/rishikesh-1/1200/800',
-      'https://picsum.photos/seed/rishikesh-2/1200/800',
-      'https://picsum.photos/seed/rishikesh-3/1200/800',
-    ],
+    image: '/images/destinations/rishikesh.jpg',
+    gallery: ['/images/destinations/rishikesh.jpg'],
     description:
       'Riverside ashrams, suspension bridges and whitewater rapids come together in this foothill town on the Ganges.',
     startingPrice: 10999,
@@ -144,12 +116,8 @@ export const destinations = [
     name: 'Udaipur',
     state: 'Rajasthan',
     tagline: 'Palaces afloat on a mirrored lake',
-    image: 'https://picsum.photos/seed/udaipur/1200/800',
-    gallery: [
-      'https://picsum.photos/seed/udaipur-1/1200/800',
-      'https://picsum.photos/seed/udaipur-2/1200/800',
-      'https://picsum.photos/seed/udaipur-3/1200/800',
-    ],
+    image: '/images/destinations/udaipur.jpg',
+    gallery: ['/images/destinations/udaipur.jpg'],
     description:
       'Known as the City of Lakes, Udaipur pairs romantic lake-facing palaces with some of Rajasthan\u2019s finest craft markets.',
     startingPrice: 15999,
@@ -164,12 +132,8 @@ export const destinations = [
     name: 'Darjeeling',
     state: 'West Bengal',
     tagline: 'Misty tea gardens under the Himalayas',
-    image: 'https://picsum.photos/id/1002/1200/800',
-    gallery: [
-      'https://picsum.photos/id/1003/1200/800',
-      'https://picsum.photos/id/1005/1200/800',
-      'https://picsum.photos/id/1006/1200/800',
-    ],
+    image: '/images/destinations/darjeeling.jpg',
+    gallery: ['/images/destinations/darjeeling.jpg'],
     description:
       'Rolling tea estates, toy trains and sunrise views of Kanchenjunga make Darjeeling a favourite hill-station escape.',
     startingPrice: 16999,
@@ -184,12 +148,8 @@ export const destinations = [
     name: 'Pondicherry',
     state: 'Puducherry',
     tagline: 'French quarters by the Bay of Bengal',
-    image: 'https://picsum.photos/id/1016/1200/800',
-    gallery: [
-      'https://picsum.photos/id/1009/1200/800',
-      'https://picsum.photos/id/1010/1200/800',
-      'https://picsum.photos/id/1011/1200/800',
-    ],
+    image: '/images/destinations/pondicherry.jpg',
+    gallery: ['/images/destinations/pondicherry.jpg'],
     description:
       'Pastel colonial buildings, quiet promenades and a laid-back café culture give Pondicherry its distinct European charm.',
     startingPrice: 13999,
@@ -204,12 +164,8 @@ export const destinations = [
     name: 'Coorg',
     state: 'Karnataka',
     tagline: 'Coffee estates in the Western Ghats',
-    image: 'https://picsum.photos/id/1012/1200/800',
-    gallery: [
-      'https://picsum.photos/id/1013/1200/800',
-      'https://picsum.photos/id/1014/1200/800',
-      'https://picsum.photos/id/1020/1200/800',
-    ],
+    image: '/images/destinations/coorg.jpg',
+    gallery: ['/images/destinations/coorg.jpg'],
     description:
       'Mist-covered coffee plantations, waterfalls and Kodava culture make Coorg one of South India\u2019s most refreshing retreats.',
     startingPrice: 14499,
@@ -224,12 +180,8 @@ export const destinations = [
     name: 'Agra',
     state: 'Uttar Pradesh',
     tagline: 'Home to the Taj Mahal',
-    image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Taj_Mahal_Front.JPG?width=1200',
-    gallery: [
-      'https://picsum.photos/id/1025/1200/800',
-      'https://picsum.photos/id/1027/1200/800',
-      'https://picsum.photos/id/1029/1200/800',
-    ],
+    image: '/images/destinations/agra.jpg',
+    gallery: ['/images/destinations/agra.jpg'],
     description:
       'A living monument to Mughal architecture, Agra pairs the world-famous Taj Mahal with forts and marble craftsmanship.',
     startingPrice: 11999,
@@ -244,12 +196,8 @@ export const destinations = [
     name: 'Mysore',
     state: 'Karnataka',
     tagline: 'Royal palaces and sandalwood scented streets',
-    image: 'https://picsum.photos/id/1031/1200/800',
-    gallery: [
-      'https://picsum.photos/id/1033/1200/800',
-      'https://picsum.photos/id/1036/1200/800',
-      'https://picsum.photos/id/1037/1200/800',
-    ],
+    image: '/images/destinations/mysore.jpg',
+    gallery: ['/images/destinations/mysore.jpg'],
     description:
       'Grand palaces, bustling silk markets and the annual Dasara festival give Mysore its regal, festive character.',
     startingPrice: 12999,

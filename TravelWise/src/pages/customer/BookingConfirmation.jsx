@@ -18,14 +18,17 @@ export default function BookingConfirmation() {
             <CheckCircle2 size={56} />
           </div>
           <h2 style={{ marginBottom: 8 }}>Booking Confirmed!</h2>
-          <p style={{ marginBottom: 28 }}>A confirmation has been sent to your email. We can't wait to see you there.</p>
+          <p style={{ marginBottom: 28 }}>Your booking has been saved. You can view it anytime in My Bookings.</p>
 
           <div className="card card-pad" style={{ background: 'var(--color-cloud)', textAlign: 'left', marginBottom: 28 }}>
             <div className="flex-col" style={{ gap: 14 }}>
               <div className="flex-between"><span className="flex muted" style={{ gap: 8 }}><Hash size={16} /> Booking ID</span><strong>{booking.id}</strong></div>
               <div className="flex-between"><span className="flex muted" style={{ gap: 8 }}><MapPin size={16} /> Destination</span><strong>{booking.destination}</strong></div>
               <div className="flex-between"><span className="muted">Package</span><strong>{booking.packageName}</strong></div>
-              <div className="flex-between"><span className="flex muted" style={{ gap: 8 }}><Calendar size={16} /> Travel Date</span><strong>{formatDate(booking.travelDate)}</strong></div>
+              <div className="flex-between"><span className="flex muted" style={{ gap: 8 }}><Calendar size={16} /> Departure</span><strong>{formatDate(booking.travelDate)}</strong></div>
+              {booking.returnDate && (
+                <div className="flex-between"><span className="flex muted" style={{ gap: 8 }}><Calendar size={16} /> Return</span><strong>{formatDate(booking.returnDate)}</strong></div>
+              )}
               <div className="flex-between"><span className="flex muted" style={{ gap: 8 }}><Users size={16} /> Travelers</span><strong>{booking.travelers}</strong></div>
               <div style={{ borderTop: '1px solid var(--color-border)', paddingTop: 12 }} className="flex-between">
                 <strong>Total Paid</strong>

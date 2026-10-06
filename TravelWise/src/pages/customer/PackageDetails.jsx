@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { ArrowLeft, Check, X, Clock, Hotel, Plane, Star } from 'lucide-react';
 import { getPackageById, packages } from '../../data/packages.js';
@@ -6,6 +6,7 @@ import { getDestinationById } from '../../data/destinations.js';
 import PackageCard from '../../components/customer/PackageCard.jsx';
 import { formatCurrency } from '../../utils/format.js';
 import { useDocumentTitle } from '../../hooks/useDocumentTitle.js';
+import { useRecentlyViewed } from '../../hooks/useRecentlyViewed.js';
 
 export default function PackageDetails() {
   const { id } = useParams();
@@ -14,8 +15,22 @@ export default function PackageDetails() {
   const destination = pkg ? getDestinationById(pkg.destinationId) : null;
   const [tab, setTab] = useState('itinerary');
   const related = packages.filter((p) => p.id !== id).slice(0, 3);
+  const { addRecent } = useRecentlyViewed();
 
   useDocumentTitle(pkg?.name || 'Package Details');
+
+  // Remember this package in the user's "recently viewed" list.
+  useEffect(() => {
+    if (!pkg) return;
+    addRecent({
+      type: 'package',
+      id: pkg.id,
+      title: pkg.name,
+      image: pkg.image,
+      path: `/customer/packages/${pkg.id}`,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pkg?.id, addRecent]);
 
   if (!pkg) {
     return (

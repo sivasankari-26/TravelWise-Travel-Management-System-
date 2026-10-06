@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { MapPin, Star, ArrowLeft, Check } from 'lucide-react';
 import { getDestinationById, destinations } from '../../data/destinations.js';
@@ -8,6 +8,7 @@ import PackageCard from '../../components/customer/PackageCard.jsx';
 import DestinationCard from '../../components/customer/DestinationCard.jsx';
 import { formatCurrency } from '../../utils/format.js';
 import { useDocumentTitle } from '../../hooks/useDocumentTitle.js';
+import { useRecentlyViewed } from '../../hooks/useRecentlyViewed.js';
 
 export default function DestinationDetails() {
   const { id } = useParams();
@@ -17,8 +18,22 @@ export default function DestinationDetails() {
   const hotels = getHotelsByDestination(id);
   const related = destinations.filter((d) => d.id !== id).slice(0, 3);
   const [activeImg, setActiveImg] = useState(0);
+  const { addRecent } = useRecentlyViewed();
 
   useDocumentTitle(destination?.name || 'Destination');
+
+  // Remember this destination in the user's "recently viewed" list.
+  useEffect(() => {
+    if (!destination) return;
+    addRecent({
+      type: 'destination',
+      id: destination.id,
+      title: destination.name,
+      image: destination.gallery?.[0],
+      path: `/customer/destinations/${destination.id}`,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [destination?.id, addRecent]);
 
   if (!destination) {
     return (

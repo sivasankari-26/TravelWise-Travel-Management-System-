@@ -8,6 +8,27 @@ import { formatCurrency } from '../../utils/format.js';
 import { isValidEmail, isValidPhone, validateRequired } from '../../utils/validators.js';
 import { useDocumentTitle } from '../../hooks/useDocumentTitle.js';
 
+// Date helpers. Dates are handled as "YYYY-MM-DD" text to avoid timezone surprises.
+const toISO = (dt) =>
+  `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, '0')}-${String(dt.getDate()).padStart(2, '0')}`;
+
+const todayISO = () => toISO(new Date());
+
+const addDays = (iso, days) => {
+  const [y, m, d] = iso.split('-').map(Number);
+  return toISO(new Date(y, m - 1, d + days));
+};
+
+const prettyDate = (iso) => {
+  const [y, m, d] = iso.split('-').map(Number);
+  return new Date(y, m - 1, d).toLocaleDateString('en-IN', {
+    weekday: 'short',
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  });
+};
+
 export default function Booking() {
   useDocumentTitle('Booking');
   const location = useLocation();
@@ -35,6 +56,9 @@ export default function Booking() {
     );
   }
 
+  const duration = Number(pkg.duration) || 1;
+  // A package of N days starts on the travel date and ends N-1 days later.
+  const returnDate = form.travelDate ? addDays(form.travelDate, duration - 1) : '';
   const totalAmount = pkg.price * (form.travelers || 1);
 
   const handleSubmit = (e) => {
@@ -42,12 +66,19 @@ export default function Booking() {
     const errs = validateRequired({ name: form.name, email: form.email, phone: form.phone, travelDate: form.travelDate });
     if (form.email && !isValidEmail(form.email)) errs.email = 'Enter a valid email address.';
     if (form.phone && !isValidPhone(form.phone)) errs.phone = 'Enter a valid 10-digit phone number.';
+    if (form.travelDate && form.travelDate < todayISO()) errs.travelDate = 'Travel date cannot be in the past.';
     if (form.travelers < 1) errs.travelers = 'At least 1 traveler is required.';
     if (!form.agree) errs.agree = 'You must accept the terms to continue.';
     setErrors(errs);
     if (Object.keys(errs).length) return;
 
-    navigate('/customer/payment', { state: { pkg, destination, booking: { ...form, amount: totalAmount } } });
+    navigate('/customer/payment', {
+      state: {
+        pkg,
+        destination,
+        booking: { ...form, returnDate, amount: totalAmount },
+      },
+    });
   };
 
   return (
@@ -75,8 +106,26 @@ export default function Booking() {
             <div className="card card-pad" style={{ marginBottom: 24 }}>
               <h4 style={{ marginBottom: 18 }}>Trip Details</h4>
               <div className="grid grid-2">
-                <Input label="Travel date" id="travelDate" type="date" icon={Calendar} value={form.travelDate} error={errors.travelDate} onChange={(e) => setForm({ ...form, travelDate: e.target.value })} />
+                <Input label="Departure date" id="travelDate" type="date" icon={Calendar} min={todayISO()} value={form.travelDate} error={errors.travelDate} onChange={(e) => setForm({ ...form, travelDate: e.target.value })} />
                 <Input label="Number of travelers" id="travelers" type="number" min={1} max={10} icon={Users} value={form.travelers} error={errors.travelers} onChange={(e) => setForm({ ...form, travelers: Number(e.target.value) })} />
+              </div>
+
+              <div
+                style={{
+                  marginTop: 8, padding: '12px 14px', borderRadius: 'var(--radius-sm)',
+                  background: 'var(--color-blue-tint)', fontSize: '0.9rem',
+                }}
+              >
+                {form.travelDate ? (
+                  <>
+                    <strong>Return date:</strong> {prettyDate(returnDate)}{' '}
+                    <span className="muted">({duration}-day package)</span>
+                  </>
+                ) : (
+                  <span className="muted">
+                    Pick a departure date and your return date will be calculated from the {duration}-day package.
+                  </span>
+                )}
               </div>
             </div>
 
@@ -99,6 +148,12 @@ export default function Booking() {
               <div className="flex-col" style={{ gap: 8, fontSize: '0.9rem', marginBottom: 16 }}>
                 <div className="flex-between"><span className="muted">Package price</span><span>{formatCurrency(pkg.price)}</span></div>
                 <div className="flex-between"><span className="muted">Travelers</span><span>× {form.travelers || 1}</span></div>
+                {form.travelDate && (
+                  <>
+                    <div className="flex-between"><span className="muted">Departure</span><span>{prettyDate(form.travelDate)}</span></div>
+                    <div className="flex-between"><span className="muted">Return</span><span>{prettyDate(returnDate)}</span></div>
+                  </>
+                )}
               </div>
               <div style={{ borderTop: '1px solid var(--color-border)', paddingTop: 14 }} className="flex-between">
                 <strong>Total</strong>

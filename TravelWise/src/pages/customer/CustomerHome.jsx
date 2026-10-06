@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Search, Sparkles, ArrowRight, Star } from 'lucide-react';
+import { Search, Sparkles, ArrowRight, Star, Clock } from 'lucide-react';
 import { destinations } from '../../data/destinations.js';
 import { packages } from '../../data/packages.js';
 import { testimonials } from '../../data/testimonials.js';
@@ -8,10 +8,12 @@ import DestinationCard from '../../components/customer/DestinationCard.jsx';
 import PackageCard from '../../components/customer/PackageCard.jsx';
 import { useAuth } from '../../context/AuthContext.jsx';
 import { useDocumentTitle } from '../../hooks/useDocumentTitle.js';
+import { useRecentlyViewed } from '../../hooks/useRecentlyViewed.js';
 
 export default function CustomerHome() {
   useDocumentTitle('Home');
   const { customer } = useAuth();
+  const { items: recentItems, clearRecent } = useRecentlyViewed();
   const [query, setQuery] = useState('');
   const navigate = useNavigate();
 
@@ -48,6 +50,45 @@ export default function CustomerHome() {
           </form>
         </div>
       </section>
+
+      {recentItems.length > 0 && (
+        <section className="section-tight">
+          <div className="container">
+            <div className="flex-between" style={{ marginBottom: 16 }}>
+              <h3 className="flex" style={{ gap: 8, margin: 0 }}>
+                <Clock size={20} color="var(--color-blue)" /> Recently viewed
+              </h3>
+              <button
+                type="button"
+                onClick={clearRecent}
+                style={{ background: 'none', border: 'none', color: 'var(--color-blue)', fontWeight: 600, fontSize: '0.85rem', cursor: 'pointer' }}
+              >
+                Clear
+              </button>
+            </div>
+            <div className="flex" style={{ gap: 14, overflowX: 'auto', paddingBottom: 6 }}>
+              {recentItems.map((item) => (
+                <Link
+                  key={`${item.type}-${item.id}`}
+                  to={item.path}
+                  className="card"
+                  style={{ minWidth: 200, maxWidth: 200, overflow: 'hidden', flexShrink: 0 }}
+                >
+                  {item.image && (
+                    <img src={item.image} alt={item.title} style={{ width: '100%', height: 110, objectFit: 'cover' }} />
+                  )}
+                  <div style={{ padding: 12 }}>
+                    <span className="badge badge-blue" style={{ marginBottom: 6 }}>
+                      {item.type === 'package' ? 'Package' : 'Destination'}
+                    </span>
+                    <div style={{ fontWeight: 700, fontSize: '0.9rem' }}>{item.title}</div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       <section className="section">
         <div className="container">

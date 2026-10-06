@@ -9,6 +9,18 @@ import { formatCurrency, generateBookingId } from '../../utils/format.js';
 import { validateRequired } from '../../utils/validators.js';
 import { useDocumentTitle } from '../../hooks/useDocumentTitle.js';
 
+// Turns "2026-10-14" into "Tue, 14 Oct 2026".
+const prettyDate = (iso) => {
+  if (!iso) return '';
+  const [y, m, d] = iso.split('-').map(Number);
+  return new Date(y, m - 1, d).toLocaleDateString('en-IN', {
+    weekday: 'short',
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  });
+};
+
 export default function Payment() {
   useDocumentTitle('Payment');
   const location = useLocation();
@@ -54,6 +66,7 @@ export default function Payment() {
         destination: destination?.name || pkg.name,
         packageName: pkg.name,
         travelDate: booking.travelDate,
+        returnDate: booking.returnDate,
         travelers: booking.travelers,
         amount: booking.amount,
         status: 'Confirmed',
@@ -118,7 +131,10 @@ export default function Payment() {
               <div className="flex-col" style={{ gap: 8, fontSize: '0.9rem', marginBottom: 16 }}>
                 <div className="flex-between"><span className="muted">Package</span><span>{pkg.name}</span></div>
                 <div className="flex-between"><span className="muted">Travelers</span><span>{booking.travelers}</span></div>
-                <div className="flex-between"><span className="muted">Travel date</span><span>{booking.travelDate}</span></div>
+                <div className="flex-between"><span className="muted">Departure</span><span>{prettyDate(booking.travelDate)}</span></div>
+                {booking.returnDate && (
+                  <div className="flex-between"><span className="muted">Return</span><span>{prettyDate(booking.returnDate)}</span></div>
+                )}
               </div>
               <div style={{ borderTop: '1px solid var(--color-border)', paddingTop: 14 }} className="flex-between">
                 <strong>Total</strong>

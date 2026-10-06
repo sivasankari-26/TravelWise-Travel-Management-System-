@@ -21,24 +21,26 @@ export default function CustomerRegister() {
 
   const update = (key) => (e) => setForm({ ...form, [key]: e.target.value });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const errs = {};
     if (!form.name.trim()) errs.name = 'Full name is required.';
     if (!isValidEmail(form.email)) errs.email = 'Enter a valid email address.';
     if (!isValidPhone(form.phone)) errs.phone = 'Enter a valid 10-digit phone number.';
-    if (!form.password || form.password.length < 4) errs.password = 'Password must be at least 4 characters.';
+    if (!form.password || form.password.length < 6) errs.password = 'Password must be at least 6 characters.';
     if (form.confirmPassword !== form.password) errs.confirmPassword = 'Passwords do not match.';
     setErrors(errs);
     if (Object.keys(errs).length) return;
 
     setLoading(true);
-    setTimeout(() => {
-      registerCustomer(form);
-      setLoading(false);
+    const result = await registerCustomer(form);
+    setLoading(false);
+    if (result.success) {
       showToast('Account created successfully!', 'success');
       navigate('/customer/home');
-    }, 500);
+    } else {
+      showToast(result.message, 'error');
+    }
   };
 
   return (
@@ -64,7 +66,7 @@ export default function CustomerRegister() {
                 id="password"
                 type={showPw ? 'text' : 'password'}
                 className={`input has-icon ${errors.password ? 'error' : ''}`}
-                placeholder="Create a password"
+                placeholder="Create a password (min 6 characters)"
                 value={form.password}
                 onChange={update('password')}
               />

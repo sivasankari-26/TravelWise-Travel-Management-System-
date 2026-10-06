@@ -17,25 +17,26 @@ export default function AdminLogin() {
   const { showToast } = useToast();
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const errs = {};
     if (!isValidEmail(form.email)) errs.email = 'Enter a valid email address.';
-    if (!form.password || form.password.length < 4) errs.password = 'Password must be at least 4 characters.';
+    if (!form.password) errs.password = 'Enter your password.';
     setErrors(errs);
     if (Object.keys(errs).length) return;
 
     setLoading(true);
-    setTimeout(() => {
-      const result = loginAdmin(form.email, form.password);
-      setLoading(false);
+    try {
+      const result = await loginAdmin(form.email, form.password);
       if (result.success) {
         showToast('Welcome back, Admin.', 'success');
         navigate('/admin/dashboard');
       } else {
         showToast(result.message, 'error');
       }
-    }, 500);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -101,10 +102,6 @@ export default function AdminLogin() {
             />
             <Button type="submit" variant="primary" block loading={loading}>Sign In to Admin Panel</Button>
           </form>
-
-          <p className="muted" style={{ fontSize: '0.78rem', marginTop: 22 }}>
-            Frontend simulation — use any email and a password of 4+ characters.
-          </p>
         </div>
       </div>
 

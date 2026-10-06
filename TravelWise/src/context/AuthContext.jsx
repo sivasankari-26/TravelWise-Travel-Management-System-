@@ -6,8 +6,21 @@ const CUSTOMER_KEY = 'tw_customer_session';
 const ADMIN_KEY = 'tw_admin_session';
 const CUSTOMER_USERS_KEY = 'tw_customer_users';
 const CUSTOMER_TOKEN_KEY = 'tw_customer_token';
+const ADMIN_TOKEN_KEY = 'tw_admin_token';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
+// Reads the JWT payload to check the role and expiry.
+// This only decides what the UI shows. The server is what really enforces security.
+const isValidAdminToken = (token) => {
+  try {
+    const base64 = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+    const payload = JSON.parse(atob(base64));
+    return payload.role === 'admin' && payload.exp * 1000 > Date.now();
+  } catch {
+    return false;
+  }
+};
 
 export function AuthProvider({ children }) {
   const [customer, setCustomer] = useState(null);
@@ -17,9 +30,17 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     try {
       const c = localStorage.getItem(CUSTOMER_KEY);
-      const a = localStorage.getItem(ADMIN_KEY);
       if (c) setCustomer(JSON.parse(c));
-      if (a) setAdmin(JSON.parse(a));
+
+      // Admin session is only restored if it has a valid, unexpired admin JWT.
+      const a = localStorage.getItem(ADMIN_KEY);
+      const at = localStorage.getItem(ADMIN_TOKEN_KEY);
+      if (a && at && isValidAdminToken(at)) {
+        setAdmin(JSON.parse(a));
+      } else {
+        localStorage.removeItem(ADMIN_KEY);
+        localStorage.removeItem(ADMIN_TOKEN_KEY);
+      }
     } catch {
       // ignore corrupted storage
     } finally {
@@ -27,7 +48,7 @@ export function AuthProvider({ children }) {
     }
   }, []);
 
-  // Helpers to read/write the list of registered customers.
+  // Kept only so updateCustomer (profile edits) keeps working.
   const getRegisteredUsers = () => {
     try {
       const raw = localStorage.getItem(CUSTOMER_USERS_KEY);
@@ -41,85 +62,59 @@ export function AuthProvider({ children }) {
     localStorage.setItem(CUSTOMER_USERS_KEY, JSON.stringify(users));
   };
 
-  // NOTE: This is a frontend-only simulation. Passwords are stored in plain
-  // text in localStorage for demo purposes only. Replace with real API auth
-  // in the backend phase.
-  const registerCustomer = (data) => {
-    const email = data.email?.trim().toLowerCase();
-    if (!email || !data.password || data.password.length < 4) {
-      return { success: false, message: 'Enter a valid email and password (min 4 characters).' };
-    }
-
-    const users = getRegisteredUsers();
-    const exists = users.some((u) => u.email === email);
-    if (exists) {
-      return { success: false, message: 'An account with this email already exists. Please log in.' };
-    }
-
-    const newUser = { name: data.name || email.split('@')[0].replace(/[._]/g, ' '), email, password: data.password };
-    users.push(newUser);
-    saveRegisteredUsers(users);
-
-    const session = { name: newUser.name, email: newUser.email };
+  // Shared helper: saves the logged-in user + JWT after any real backend login.
+  const saveSession = (data) => {
+    const session = {
+      name: data.user.name,
+      email: data.user.email,
+      picture: data.user.picture,
+      role: data.user.role,
+    };
     localStorage.setItem(CUSTOMER_KEY, JSON.stringify(session));
+    localStorage.setItem(CUSTOMER_TOKEN_KEY, data.token);
     setCustomer(session);
-    return { success: true };
   };
 
-  const loginCustomer = (email, password) => {
-    const cleanEmail = email?.trim().toLowerCase();
-    if (!cleanEmail || !password || password.length < 4) {
-      return { success: false, message: 'Enter a valid email and password (min 4 characters).' };
-    }
-
-    const users = getRegisteredUsers();
-    const match = users.find((u) => u.email === cleanEmail);
-
-    if (!match) {
-      return { success: false, message: 'No account found with this email. Please register first.' };
-    }
-    if (match.password !== password) {
-      return { success: false, message: 'Incorrect password. Please try again.' };
-    }
-
-    const session = { name: match.name, email: match.email };
-    localStorage.setItem(CUSTOMER_KEY, JSON.stringify(session));
-    setCustomer(session);
-    return { success: true };
-  };
-
-  // Real backend call: sends the Google ID token to our Express server,
-  // which verifies it with Google, creates/finds the user in MongoDB,
-  // and returns our own JWT.
-  const loginWithGoogle = async (googleToken) => {
+  // Shared helper: sends a POST request to our Express backend.
+  const postToServer = async (path, body) => {
     try {
-      const res = await fetch(`${API_URL}/auth/google`, {
+      const res = await fetch(`${API_URL}${path}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token: googleToken }),
+        body: JSON.stringify(body),
       });
       const data = await res.json();
-
       if (!res.ok || !data.success) {
-        return { success: false, message: data.message || 'Google sign-in failed.' };
+        return { success: false, message: data.message || 'Something went wrong.' };
       }
-
-      const session = { name: data.user.name, email: data.user.email, picture: data.user.picture };
-      localStorage.setItem(CUSTOMER_KEY, JSON.stringify(session));
-      localStorage.setItem(CUSTOMER_TOKEN_KEY, data.token);
-      setCustomer(session);
+      saveSession(data);
       return { success: true };
-    } catch (err) {
+    } catch {
       return { success: false, message: 'Could not reach the server. Please try again.' };
     }
   };
+
+  // Real backend: creates the user in MongoDB with a hashed password.
+  const registerCustomer = (data) =>
+    postToServer('/auth/register', {
+      name: data.name,
+      email: data.email,
+      password: data.password,
+    });
+
+  // Real backend: checks email + password in MongoDB, returns a JWT.
+  const loginCustomer = (email, password) =>
+    postToServer('/auth/login', { email, password });
+
+  // Real backend: Google ID token -> our JWT.
+  const loginWithGoogle = (googleToken) =>
+    postToServer('/auth/google', { token: googleToken });
 
   const updateCustomer = (updates) => {
     setCustomer((prev) => {
       const next = { ...prev, ...updates };
       localStorage.setItem(CUSTOMER_KEY, JSON.stringify(next));
 
-      // Keep the registered-users record in sync so future logins see updates.
       const users = getRegisteredUsers();
       const idx = users.findIndex((u) => u.email === prev.email);
       if (idx !== -1) {
@@ -137,18 +132,38 @@ export function AuthProvider({ children }) {
     setCustomer(null);
   };
 
-  const loginAdmin = (email, password) => {
-    if (!email || !password || password.length < 4) {
-      return { success: false, message: 'Enter valid admin credentials.' };
+  // Real backend: only accounts with role "admin" in MongoDB can log in here.
+  const loginAdmin = async (email, password) => {
+    if (!email || !password) {
+      return { success: false, message: 'Enter your admin email and password.' };
     }
-    const session = { name: 'Admin', email };
-    localStorage.setItem(ADMIN_KEY, JSON.stringify(session));
-    setAdmin(session);
-    return { success: true };
+    try {
+      const res = await fetch(`${API_URL}/auth/admin-login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        return { success: false, message: data.message || 'Invalid admin credentials.' };
+      }
+      const session = {
+        name: data.user.name,
+        email: data.user.email,
+        role: data.user.role,
+      };
+      localStorage.setItem(ADMIN_KEY, JSON.stringify(session));
+      localStorage.setItem(ADMIN_TOKEN_KEY, data.token);
+      setAdmin(session);
+      return { success: true };
+    } catch {
+      return { success: false, message: 'Could not reach the server. Please try again.' };
+    }
   };
 
   const logoutAdmin = () => {
     localStorage.removeItem(ADMIN_KEY);
+    localStorage.removeItem(ADMIN_TOKEN_KEY);
     setAdmin(null);
   };
 
