@@ -14,6 +14,9 @@ import { useDocumentTitle } from '../../hooks/useDocumentTitle.js';
 
 const STATUS_FILTERS = ['All', 'Confirmed', 'Pending', 'Cancelled'];
 
+const getDeparture = (b) => b.departureDate || b.travelDate;
+const showDate = (d) => (d ? formatDate(d) : '—');
+
 export default function AdminBookings() {
   useDocumentTitle('Manage Bookings');
   const [bookings, setBookings] = useLocalStorage('tw_bookings', seedBookings);
@@ -24,7 +27,7 @@ export default function AdminBookings() {
 
   const filtered = useMemo(
     () => bookings.filter((b) => {
-      const matchesQuery = `${b.customerName} ${b.destination} ${b.id}`.toLowerCase().includes(query.toLowerCase());
+      const matchesQuery = `${b.customerName || ''} ${b.destination} ${b.id}`.toLowerCase().includes(query.toLowerCase());
       const matchesStatus = status === 'All' || b.status === status;
       return matchesQuery && matchesStatus;
     }),
@@ -54,7 +57,8 @@ export default function AdminBookings() {
             { key: 'id', label: 'Booking ID' },
             { key: 'customerName', label: 'Customer' },
             { key: 'destination', label: 'Destination' },
-            { key: 'travelDate', label: 'Date', render: (r) => formatDate(r.travelDate) },
+            { key: 'departureDate', label: 'Departure', render: (r) => showDate(getDeparture(r)) },
+            { key: 'returnDate', label: 'Return', render: (r) => showDate(r.returnDate) },
             { key: 'travelers', label: 'Travelers' },
             { key: 'amount', label: 'Amount', render: (r) => formatCurrency(r.amount) },
             { key: 'status', label: 'Status', render: (r) => <StatusBadge status={r.status} /> },
@@ -77,7 +81,8 @@ export default function AdminBookings() {
               <div className="flex-between"><span className="muted">Email</span><strong>{viewing.customerEmail}</strong></div>
               <div className="flex-between"><span className="muted">Destination</span><strong>{viewing.destination}</strong></div>
               <div className="flex-between"><span className="muted">Package</span><strong>{viewing.packageName}</strong></div>
-              <div className="flex-between"><span className="muted">Travel Date</span><strong>{formatDate(viewing.travelDate)}</strong></div>
+              <div className="flex-between"><span className="muted">Departure</span><strong>{showDate(getDeparture(viewing))}</strong></div>
+              <div className="flex-between"><span className="muted">Return</span><strong>{showDate(viewing.returnDate)}</strong></div>
               <div className="flex-between"><span className="muted">Travelers</span><strong>{viewing.travelers}</strong></div>
               <div className="flex-between"><span className="muted">Amount</span><strong>{formatCurrency(viewing.amount)}</strong></div>
               <div className="flex-between"><span className="muted">Status</span><StatusBadge status={viewing.status} /></div>

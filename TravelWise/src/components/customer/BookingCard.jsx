@@ -4,6 +4,9 @@ import { formatCurrency, formatDate } from '../../utils/format.js';
 import StatusBadge from '../common/StatusBadge.jsx';
 
 export default function BookingCard({ booking, onCancel }) {
+  const departure = booking.departureDate || booking.travelDate;
+  const returnDate = booking.returnDate;
+
   return (
     <div className="card card-pad">
       <div className="flex-between" style={{ marginBottom: 14, flexWrap: 'wrap', gap: 10 }}>
@@ -13,13 +16,27 @@ export default function BookingCard({ booking, onCancel }) {
         </div>
         <StatusBadge status={booking.status} />
       </div>
-      <div className="grid grid-3" style={{ gap: 14, marginBottom: 16 }}>
+      <div
+        className="grid"
+        style={{
+          gap: 14,
+          marginBottom: 16,
+          gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))',
+        }}
+      >
         <div className="flex" style={{ gap: 8, fontSize: '0.88rem' }}>
           <MapPin size={16} color="var(--color-blue)" /> {booking.destination}
         </div>
         <div className="flex" style={{ gap: 8, fontSize: '0.88rem' }}>
-          <Calendar size={16} color="var(--color-blue)" /> {formatDate(booking.travelDate)}
+          <Calendar size={16} color="var(--color-blue)" />
+          <span>Departure: <strong>{departure ? formatDate(departure) : '—'}</strong></span>
         </div>
+        {returnDate && (
+          <div className="flex" style={{ gap: 8, fontSize: '0.88rem' }}>
+            <Calendar size={16} color="var(--color-blue)" />
+            <span>Return: <strong>{formatDate(returnDate)}</strong></span>
+          </div>
+        )}
         <div className="flex" style={{ gap: 8, fontSize: '0.88rem' }}>
           <Users size={16} color="var(--color-blue)" /> {booking.travelers} Traveler{booking.travelers > 1 ? 's' : ''}
         </div>

@@ -2,17 +2,43 @@ import { useMemo, useState } from 'react';
 import { Eye } from 'lucide-react';
 import DataTable from '../../components/common/DataTable.jsx';
 import SearchBar from '../../components/common/SearchBar.jsx';
-import StatusBadge from '../../components/common/StatusBadge.jsx';
 import AdminModal from '../../components/admin/AdminModal.jsx';
 import { useLocalStorage } from '../../hooks/useLocalStorage.js';
-import { seedCustomers } from '../../data/customers.js';
+import { seedBookings } from '../../data/bookings.js';
+import { formatCurrency } from '../../utils/format.js';
 import { useDocumentTitle } from '../../hooks/useDocumentTitle.js';
 
 export default function AdminCustomers() {
   useDocumentTitle('Manage Customers');
-  const [customers] = useLocalStorage('tw_admin_customers', seedCustomers);
+  const [storedBookings] = useLocalStorage('tw_bookings', seedBookings);
   const [query, setQuery] = useState('');
   const [viewing, setViewing] = useState(null);
+
+  // Customers are built from real bookings: one row per customer who has booked.
+  const customers = useMemo(() => {
+    const map = {};
+    (storedBookings || []).forEach((b) => {
+      const key = b.customerEmail || b.customerName;
+      if (!key) return;
+      if (!map[key]) {
+        map[key] = {
+          id: key,
+          name: b.customerName || '—',
+          email: b.customerEmail || '—',
+          bookingCount: 0,
+          cancelledCount: 0,
+          totalSpent: 0,
+        };
+      }
+      map[key].bookingCount += 1;
+      if (b.status === 'Cancelled') {
+        map[key].cancelledCount += 1;
+      } else {
+        map[key].totalSpent += Number(b.amount) || 0;
+      }
+    });
+    return Object.values(map).sort((a, b) => b.bookingCount - a.bookingCount);
+  }, [storedBookings]);
 
   const filtered = useMemo(
     () => customers.filter((c) => `${c.name} ${c.email}`.toLowerCase().includes(query.toLowerCase())),
@@ -30,9 +56,8 @@ export default function AdminCustomers() {
           columns={[
             { key: 'name', label: 'Name' },
             { key: 'email', label: 'Email' },
-            { key: 'phone', label: 'Phone' },
             { key: 'bookingCount', label: 'Bookings' },
-            { key: 'status', label: 'Status', render: (r) => <StatusBadge status={r.status} /> },
+            { key: 'totalSpent', label: 'Total Spent', render: (r) => formatCurrency(r.totalSpent) },
             {
               key: 'actions', label: 'Actions', render: (r) => (
                 <button className="btn btn-outline btn-sm" onClick={() => setViewing(r)}><Eye size={14} /> View</button>
@@ -40,7 +65,7 @@ export default function AdminCustomers() {
             },
           ]}
           rows={filtered}
-          emptyMessage="No customers match your search."
+          emptyMessage="No customers yet. Customers appear here after they make a booking."
         />
       </div>
 
@@ -48,9 +73,9 @@ export default function AdminCustomers() {
         {viewing && (
           <div className="flex-col" style={{ gap: 10, fontSize: '0.92rem' }}>
             <div className="flex-between"><span className="muted">Email</span><strong>{viewing.email}</strong></div>
-            <div className="flex-between"><span className="muted">Phone</span><strong>{viewing.phone}</strong></div>
             <div className="flex-between"><span className="muted">Total Bookings</span><strong>{viewing.bookingCount}</strong></div>
-            <div className="flex-between"><span className="muted">Status</span><StatusBadge status={viewing.status} /></div>
+            <div className="flex-between"><span className="muted">Cancelled</span><strong>{viewing.cancelledCount}</strong></div>
+            <div className="flex-between"><span className="muted">Total Spent</span><strong>{formatCurrency(viewing.totalSpent)}</strong></div>
           </div>
         )}
       </AdminModal>

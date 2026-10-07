@@ -1,9 +1,8 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Search, Sparkles, ArrowRight, Star, Clock } from 'lucide-react';
+import { Search, Sparkles, ArrowRight, Clock } from 'lucide-react';
 import { destinations } from '../../data/destinations.js';
 import { packages } from '../../data/packages.js';
-import { testimonials } from '../../data/testimonials.js';
 import DestinationCard from '../../components/customer/DestinationCard.jsx';
 import PackageCard from '../../components/customer/PackageCard.jsx';
 import { useAuth } from '../../context/AuthContext.jsx';
@@ -26,7 +25,7 @@ export default function CustomerHome() {
     <div>
       <section
         style={{
-          background: 'linear-gradient(180deg, rgba(15,23,42,0.6), rgba(15,23,42,0.85)), url(https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=1600&auto=format&fit=crop) center/cover',
+          background: 'linear-gradient(180deg, rgba(15,23,42,0.6), rgba(15,23,42,0.85)), url(/images/destinations/goa.jpg) center/cover',
           color: '#fff', padding: '72px 0',
         }}
       >
@@ -128,27 +127,6 @@ export default function CustomerHome() {
               <p style={{ margin: 0 }}>Let the Smart Travel Advisor find the right combination for you.</p>
             </div>
             <Link to="/customer/customize-package" className="btn btn-primary">Customize a Trip</Link>
-          </div>
-        </div>
-      </section>
-
-      <section className="section" style={{ background: '#fff' }}>
-        <div className="container">
-          <div className="section-head center">
-            <span className="eyebrow">Traveller Stories</span>
-            <h2>Recent experiences</h2>
-          </div>
-          <div className="grid grid-3">
-            {testimonials.map((t) => (
-              <div key={t.id} className="card card-pad">
-                <div className="stars" style={{ marginBottom: 12 }}>
-                  {Array.from({ length: t.rating }).map((_, i) => <Star key={i} size={14} fill="currentColor" />)}
-                </div>
-                <p style={{ fontStyle: 'italic', marginBottom: 16 }}>"{t.quote}"</p>
-                <div style={{ fontWeight: 700, fontSize: '0.9rem' }}>{t.name}</div>
-                <div className="muted" style={{ fontSize: '0.8rem' }}>{t.trip}</div>
-              </div>
-            ))}
           </div>
         </div>
       </section>

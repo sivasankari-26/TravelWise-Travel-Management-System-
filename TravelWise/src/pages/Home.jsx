@@ -1,11 +1,10 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
-  Compass, Search, ShieldCheck, Sparkles, Wallet, HeadphonesIcon, Star, ArrowRight, MapPin,
+  Compass, Search, Sparkles, Wallet, CalendarCheck, ArrowRight, MapPin,
 } from 'lucide-react';
 import { destinations } from '../data/destinations.js';
 import { packages } from '../data/packages.js';
-import { testimonials } from '../data/testimonials.js';
 import DestinationCard from '../components/customer/DestinationCard.jsx';
 import PackageCard from '../components/customer/PackageCard.jsx';
 import Footer from '../components/common/Footer.jsx';
@@ -54,14 +53,14 @@ export default function Home() {
       <section
         style={{
           position: 'relative', minHeight: '640px', display: 'flex', alignItems: 'center',
-          background: 'linear-gradient(180deg, rgba(15,23,42,0.55), rgba(15,23,42,0.82)), url(https://images.unsplash.com/photo-1502920917128-1aa500764cbd?q=80&w=1600&auto=format&fit=crop) center/cover',
+          background: 'linear-gradient(180deg, rgba(15,23,42,0.55), rgba(15,23,42,0.82)), url(/images/destinations/ladakh.jpg) center/cover',
           color: '#fff', padding: '140px 0 80px',
         }}
       >
         <div className="container">
           <div style={{ maxWidth: 640 }}>
             <span className="eyebrow" style={{ background: 'rgba(255,255,255,0.12)', color: '#fff' }}>
-              <Sparkles size={13} /> Trusted by 12,000+ travellers
+              <Sparkles size={13} /> Plan smarter, travel better
             </span>
             <h1 style={{ color: '#fff', marginBottom: 18 }}>Travel Wise — Explore Your Next Destination</h1>
             <p style={{ color: '#cbd5e1', fontSize: '1.05rem', marginBottom: 32, maxWidth: 520 }}>
@@ -144,10 +143,10 @@ export default function Home() {
           </Reveal>
           <div className="grid grid-4">
             {[
-              { icon: Wallet, title: 'Transparent Pricing', text: 'See exactly what you pay for — no hidden fees, ever.' },
+              { icon: Wallet, title: 'Transparent Pricing', text: 'See exactly what you pay for before you book.' },
               { icon: Sparkles, title: 'Smart Travel Advisor', text: 'Get instant suggestions to fit your trip to your budget.' },
-              { icon: ShieldCheck, title: 'Verified Partners', text: 'Hotels and transport vetted for quality and reliability.' },
-              { icon: HeadphonesIcon, title: '24/7 Support', text: 'Help is always a message away, before and during your trip.' },
+              { icon: MapPin, title: 'Destinations Across India', text: `Choose from ${destinations.length} destinations, from beaches to mountains.` },
+              { icon: CalendarCheck, title: 'Manage Your Trips', text: 'View, track and cancel your bookings from one place.' },
             ].map((f) => (
               <Reveal key={f.title}>
                 <div className="card card-pad text-center">
@@ -180,6 +179,9 @@ export default function Home() {
             </Reveal>
             <Reveal>
               <div className="card card-pad" style={{ background: '#fff' }}>
+                <span className="muted" style={{ fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: 12 }}>
+                  Example
+                </span>
                 <div className="flex-between" style={{ marginBottom: 16 }}>
                   <div>
                     <span className="muted" style={{ fontSize: '0.78rem' }}>Your Budget</span>
@@ -204,32 +206,6 @@ export default function Home() {
                 </div>
               </div>
             </Reveal>
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials */}
-      <section className="section" style={{ background: '#fff' }}>
-        <div className="container">
-          <Reveal>
-            <div className="section-head center">
-              <span className="eyebrow">Traveller Stories</span>
-              <h2>What Travel Wise customers are saying</h2>
-            </div>
-          </Reveal>
-          <div className="grid grid-3">
-            {testimonials.map((t) => (
-              <Reveal key={t.id}>
-                <div className="card card-pad">
-                  <div className="stars" style={{ marginBottom: 12 }}>
-                    {Array.from({ length: t.rating }).map((_, i) => <Star key={i} size={14} fill="currentColor" />)}
-                  </div>
-                  <p style={{ fontStyle: 'italic', marginBottom: 16 }}>"{t.quote}"</p>
-                  <div style={{ fontWeight: 700, fontSize: '0.9rem' }}>{t.name}</div>
-                  <div className="muted" style={{ fontSize: '0.8rem' }}>{t.trip}</div>
-                </div>
-              </Reveal>
-            ))}
           </div>
         </div>
       </section>
